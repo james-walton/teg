@@ -1,20 +1,20 @@
 <?php
  /**
-  *------
-  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
-  * TEG implementation : © <Your name here> <Your email address here>
-  * 
-  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
-  * See http://en.boardgamearena.com/#!doc/Studio for more information.
-  * -----
-  * 
-  * teg.game.php
-  *
-  * This is the main file for your game logic.
-  *
-  * In this PHP file, you are going to defines the rules of the game.
-  *
-  */
+	*------
+	* BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+	* TEG implementation : © <Your name here> <Your email address here>
+	* 
+	* This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+	* See http://en.boardgamearena.com/#!doc/Studio for more information.
+	* -----
+	* 
+	* teg.game.php
+	*
+	* This is the main file for your game logic.
+	*
+	* In this PHP file, you are going to defines the rules of the game.
+	*
+	*/
 
 
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
@@ -41,8 +41,11 @@ class TEG extends Table
 			//      ...
 		) );        
 		
-		$this->cards = self::getNew( "module.common.deck" );
-		$this->cards->init( "card" );
+		$this->planetCards = self::getNew( "module.common.deck" );
+		$this->planetCards->init( "planet_cards" );
+
+		// $this->secretMissionCards = self::getNew( "module.common.deck" );
+		// $this->secretMissionCards->init( "secret_mission_cards");
 	}
 	
 	protected function getGameName( )
@@ -92,6 +95,24 @@ class TEG extends Table
 
 		// TODO: setup the initial game situation here
 
+		//// Initialize card decks
+		$planetCards = array ();
+		for( $value=1; $value<=40; $value++ ) {
+				$planetCards[] = array( 'type' => 'planet', 'type_arg' => $value, 'nbr' => 1);
+		}
+		$this->planetCards->createCards( $planetCards, 'deck' );
+
+		// for( $value=1; $value<=40; $value++ ) {
+		// 		$missionCards[] = array( 'type' => 'mission', 'type_arg' => $value, 'nbr' => 1);
+		// }
+		// $this->secretMissionCards->createCards( $missionCards, 'deck' );
+
+		$this->planetCards->shuffle( 'deck' );
+		//// Deal 5 planet cards to tableau
+		for( $value=1; $value<=5; $value++ ) {
+			$cards = $this->planetCards->pickCardForLocation( 'deck', 'tableau', $value);
+		}
+
 
 		// Activate first player (which is in general a good idea :) )
 		$this->activeNextPlayer();
@@ -113,13 +134,20 @@ class TEG extends Table
 		$result = array();
 	
 		$current_player_id = self::getCurrentPlayerId();    // !! We must only return informations visible by this player !!
-	
+		$active_player_id = self::getActivePlayerId();
+
 		// Get information about players
 		// Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
 		$sql = "SELECT player_id id, player_score score FROM player ";
 		$result['players'] = self::getCollectionFromDb( $sql );
-  
+	
 		// TODO: Gather all information about current game situation (visible by player $current_player_id).
+
+		//// Get all planet cards on players' galaxy boards and the center tableau
+		$result['planet_cards_on_galaxy_boards'] = $this->planetCards->getCardsInLocation( 'galaxy_board' );
+		$result['planet_cards_on_tableau'] = $this->planetCards->getCardsInLocation( 'tableau', null, 'type_arg' );
+
+		//// TODO - gather state and location of dice and ships
 
 
 		return $result;
@@ -151,7 +179,27 @@ class TEG extends Table
 		In this space, you can put any utility methods useful for your game logic
 	*/
 
-
+	 // get score
+	 function dbGetScore($player_id) {
+			 return $this->getUniqueValueFromDB("SELECT player_score FROM player WHERE player_id='$player_id'");
+	 }
+	 // set score
+	 function dbSetScore($player_id, $count) {
+			 $this->DbQuery("UPDATE player SET player_score='$count' WHERE player_id='$player_id'");
+	 }
+	 // set aux score (tie breaker)
+	 function dbSetAuxScore($player_id, $score) {
+			 $this->DbQuery("UPDATE player SET player_score_aux=$score WHERE player_id='$player_id'");
+	 }
+	 // increment score (can be negative too)
+	 function dbIncScore($player_id, $inc) {
+			 $count = $this->dbGetScore($player_id);
+			 if ($inc != 0) {
+					 $count += $inc;
+					 $this->dbSetScore($player_id, $count);
+			 }
+			 return $count;
+	 }
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
@@ -183,7 +231,7 @@ class TEG extends Table
 			'card_name' => $card_name,
 			'card_id' => $card_id
 		) );
-		  
+			
 	}
 	
 	*/
@@ -237,6 +285,9 @@ class TEG extends Table
 		$this->gamestate->nextState( 'some_gamestate_transition' );
 	}    
 	*/
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Zombie

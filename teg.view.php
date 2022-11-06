@@ -41,12 +41,6 @@ class view_teg_teg extends game_view
 		$players_nbr = count( $players );
 
 		/*********** Place your code below:  ************/
-		// $cardsInTableau = $this->cards->getCardsInLocation("tableau");
-		// $template = self::getGameName() . "_" . self::getGameName();
-		// $this->page->begin_block($template, "tableaucard");
-		// foreach( $cardsInTableau as $card_id => $info ) {
-		// 	$this->page->insert_block("tableaucard", array ("CARD_ID" => $card_id));
-		//}
 
 
 		/*

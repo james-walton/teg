@@ -25,13 +25,8 @@
     Please REMOVE this comment before publishing your game on BGA
 -->
 
-<div id="tableau" class="whiteblock">
-    <div id="tableau_card_space_1"></div>
-    <div id="tableau_card_space_2"></div>
-    <div id="tableau_card_space_3"></div>
-    <div id="tableau_card_space_4"></div>
-    <div id="tableau_card_space_5"></div>
-</div>
+<div id="outer_space"></div>
+<div id="tableau" class="whiteblock"></div>
 
 <div id="planet_deck"></div>
 

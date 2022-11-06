@@ -26,17 +26,18 @@ define([
 	"ebg/counter",
 	"ebg/stock"
 ],
+
 function (dojo, declare) {
 	return declare("bgagame.teg", ebg.core.gamegui, {
 		constructor: function(){
 			console.log('teg constructor');
 			
-			this.cardwidth = 373;
-			this.cardheight = 523;
 			// Here, you can init the global variables of your user interface
 			// Example:
 			// this.myGlobalValue = 0;
 
+			this.cardwidth = 200;
+			this.cardheight = 280;
 		},
 		
 		/*
@@ -65,6 +66,26 @@ function (dojo, declare) {
 			}
 			
 			// TODO: Set up your game interface here, according to "gamedatas"
+			
+			this.tableau = new ebg.stock();
+			this.tableau.create( this, $('tableau'), this.cardwidth, this.cardheight);
+			this.tableau.image_items_per_row = 40;
+			this.tableau.setSelectionMode(0);  //cannot be selected
+		  this.tableau.extraClasses='card';  //Rounded corners and black border
+			for (var index = 1; index <= 40; index++) {
+				this.tableau.addItemType(index, index, g_gamethemeurl + '/img/cards.jpg', index);
+			}
+
+			///display tableau cards
+			for (var card_id in gamedatas.planet_cards_on_tableau ) {
+				var card = gamedatas.planet_cards_on_tableau[card_id];
+				var type = card.type_arg;
+				//console.log (card, type);
+				this.tableau.addToStockWithId(type, card_id, 'overall_player_board_2368842');
+				
+			}
+
+
 
 			// Setup game notifications to handle (see "setupNotifications" method below)
 			this.setupNotifications();

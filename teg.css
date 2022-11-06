@@ -69,17 +69,15 @@
 
 #tableau {
 	position: relative;
-	width: 2000px;
-	height: 600px;
+	width: 1200px;
+	height: 400px;
 }
 
-.tableaucard {
-	display: inline-block;
-	position: relative;
-	margin-top: 5px;
-	width: 373px;
-	height: 523px;
-	background-image: url('img/cards.jpg');
+.card {
 	border: 1px solid black;
 	border-radius: 10px;
+}
+
+#outer_space {
+	top: -500px;
 }

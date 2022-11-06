@@ -18,22 +18,18 @@
 -- Note: The database schema is created from this file when the game starts. If you modify this file,
 --       you have to restart a game to see your changes in database.
 
--- Example 1: create a standard "card" table to be used with the "Deck" tools (see example game "hearts"):
-
--- CREATE TABLE IF NOT EXISTS `card` (
---   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
---   `card_type` varchar(16) NOT NULL,
---   `card_type_arg` int(11) NOT NULL,
---   `card_location` varchar(16) NOT NULL,
---   `card_location_arg` int(11) NOT NULL,
---   PRIMARY KEY (`card_id`)
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
 -- Example 2: add a custom field to the standard "player" table
 -- ALTER TABLE `player` ADD `player_my_custom_field` INT UNSIGNED NOT NULL DEFAULT '0';
 
-CREATE TABLE IF NOT EXISTS `card` (
+-- add info about first player
+ALTER TABLE `player` ADD `player_first` BOOLEAN NOT NULL DEFAULT '0';
+
+-- ALTER TABLE `player`  ADD `number_of_dice` TINYINT NOT NULL DEFAULT '4',
+-- 											ADD `number_of_ships` TINYINT NOT NULL DEFAULT '2',
+-- 											ADD `energy` TINYINT NOT NULL DEFAULT '2',
+-- 											ADD `culture` TINYINT NOT NULL DEFAULT '2',
+
+CREATE TABLE IF NOT EXISTS `planet_cards` (
 	`card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`card_type` varchar(16) NOT NULL,
 	`card_type_arg` int(11) NOT NULL,
@@ -42,5 +38,21 @@ CREATE TABLE IF NOT EXISTS `card` (
 	PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- add info about first player
- ALTER TABLE `player` ADD `player_first` BOOLEAN NOT NULL DEFAULT '0';
+--  CREATE TABLE IF NOT EXISTS `secret_mission_cards` (
+-- 	`card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+-- 	`card_type` varchar(16) NOT NULL,
+-- 	`card_type_arg` int(11) NOT NULL,
+-- 	`card_location` varchar(16) NOT NULL,
+-- 	`card_location_arg` int(11) NOT NULL,
+-- 	PRIMARY KEY (`card_id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--  CREATE TABLE IF NOT EXISTS `galaxy_mats` (
+-- 	`player_id` int(10) unsigned NOT NULL,
+-- 	`card_type` varchar(16) NOT NULL,
+-- 	`card_type_arg` int(11) NOT NULL,
+-- 	`card_location` varchar(16) NOT NULL,
+-- 	`card_location_arg` int(11) NOT NULL,
+-- 	PRIMARY KEY (`card_id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
