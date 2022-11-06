@@ -43,7 +43,7 @@ function (dojo, declare) {
 		/*
 			setup:
 			
-			This method must set up the game user interface according to current game situation specified
+			This method must set up the game user interface accor ding to current game situation specified
 			in parameters.
 			
 			The method is called each time the game interface is displayed to a player, ie:
